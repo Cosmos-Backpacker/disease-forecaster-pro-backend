@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: DiseaseForecasterPro
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1111
+    url: jdbc:mysql://localhost:3306/forecasterpro?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai&useSSL=false
+  session:
+    timeout: 86400  # session??????
+
+
+
+server:
+  port: 8080
+  servlet:
+    session:
+      cookie:
+        name: SESSION               # Cookie ??
+        max-age: 604800             # Cookie ????????7 ?
+        http-only: true             # ? HTTP ??
+        secure: false               # ???? HTTPS???? true
+        same-site: lax              # SameSite ??
+  address: 0.0.0.0
+
+
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false    # ??????
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.cosmos.usercenter.pojo   # ???????package?????????
+  global-config:
+    db-config: #????????????????????????????????
+      logic-delete-field: deleted # ?????????
+      logic-delete-value: 1 # ??????
+      logic-not-delete-value: 0 # ??????
