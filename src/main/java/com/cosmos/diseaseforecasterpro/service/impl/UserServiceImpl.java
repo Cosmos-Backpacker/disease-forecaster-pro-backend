@@ -8,13 +8,14 @@ import com.cosmos.diseaseforecasterpro.pojo.User;
 import com.cosmos.diseaseforecasterpro.mapper.UserMapper;
 import com.cosmos.diseaseforecasterpro.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,7 +44,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     /**
      * 用户登录态的键
      */
-    private static final String USER_LOGIN_STATE = "userLoginState";
+    public static final String USER_LOGIN_STATE = "userLoginState";
     private static final int ADMIN_CODE = 1;
 
     @Override
@@ -54,17 +55,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
 
         if (account.length() < 4) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "不能为空");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号不能小于4位");
         }
 
-        if (password.length() < 8 || checkPassword.length() < 8) {
-            return Result.error("密码不能小于8位");
+        if (password.length() < 6 || checkPassword.length() < 6) {
+            return Result.error("密码不能小于6位");
 
         }
 
 
         //2.检验是否包含特殊字符
-
         //匹配字符差串中是否包含特殊字符
         String validPattern = "[^a-zA-Z0-9]";
         Matcher matcher = Pattern.compile(validPattern).matcher(account);
@@ -117,11 +117,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         //2.检验账号密码长度
         if (account.length() < 4) {
-            return Result.error("账号不能小于4位");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号不能小于4位");
         }
 
-        if (password.length() < 8) {
-            return Result.error("密码不能小于8位");
+        if (password.length() < 6) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码不能小于6位");
 
         }
         //3.匹配字符差串中是否包含特殊字符
@@ -145,17 +145,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (user == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号或密码错误");
         } else {
-            //往session中设置id
-            request.getSession().setAttribute(USER_LOGIN_STATE, user);
+
             //脱敏
             //这里创建一个新的用户对象用于返回部分值到前端
             User safetyUser = getSafetyUser(user);
-            return Result.success("恭喜你登录成功！！", safetyUser);
+
+            HttpSession session = request.getSession();
+            log.info("Session ID: {}", session.getId());
+            session.setAttribute(USER_LOGIN_STATE, safetyUser);
+
+
+            //往session中设置的登录状态
+//            request.getSession().setAttribute(USER_LOGIN_STATE, safetyUser);
+            log.info("存储Session成功,{}",safetyUser.toString());
+
+            return Result.success("登录成功！！", safetyUser);
         }
 
     }
 
-
+    @Override
     public User getSafetyUser(User origenUser) {
         User safetyUser = new User();
         safetyUser.setId(origenUser.getId());
@@ -178,6 +187,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         //移除登录态
         throw new BusinessException(ErrorCode.NO_AUTH, "未登录");
+    }
+
+    @Override
+    public long getUserId(HttpServletRequest request) {
+
+        //从session中获取用户信息
+        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        if (userObj == null) {
+            throw new BusinessException(ErrorCode.NO_AUTH, "未登录");
+        }
+        //强转
+        User user = (User) userObj;
+
+        return user.getId();
     }
 
 

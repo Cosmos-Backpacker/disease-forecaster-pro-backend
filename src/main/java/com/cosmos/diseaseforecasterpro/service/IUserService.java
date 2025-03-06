@@ -1,22 +1,20 @@
 package com.cosmos.diseaseforecasterpro.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.cosmos.diseaseforecasterpro.pojo.Result;
 import com.cosmos.diseaseforecasterpro.pojo.User;
-import com.baomidou.mybatisplus.extension.service.IService;
-import org.springframework.stereotype.Service;
+import jakarta.servlet.http.HttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author CosmosBackpacker
  * @since 2025-02-27
  */
-@Service
 public interface IUserService extends IService<User> {
 
 
@@ -74,6 +72,9 @@ public interface IUserService extends IService<User> {
     public Result userLayout(HttpServletRequest request);
 
 
+
+
+    public long getUserId(HttpServletRequest request);
 
 
 }
