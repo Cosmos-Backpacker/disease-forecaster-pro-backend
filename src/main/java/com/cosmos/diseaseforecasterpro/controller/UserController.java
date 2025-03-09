@@ -3,6 +3,7 @@ package com.cosmos.diseaseforecasterpro.controller;
 
 import com.cosmos.diseaseforecasterpro.SSE.SseClient;
 import com.cosmos.diseaseforecasterpro.pojo.Result;
+import com.cosmos.diseaseforecasterpro.pojo.User;
 import com.cosmos.diseaseforecasterpro.service.IUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -11,14 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-/**
- * <p>
- * 前端控制器
- * </p>
- *
- * @author CosmosBackpacker
- * @since 2025-02-27
- */
+
 @Slf4j
 @RestController
 @RequestMapping("/user")
@@ -38,13 +32,14 @@ public class UserController {
      * @return SseEmitter
      */
     @GetMapping("/SseLink")
-    public SseEmitter SseLink(HttpServletRequest request) {
+    public SseEmitter SseLink(HttpServletRequest request, String LinkedType) {
 
         long userId = userService.getUserId(request);
 
-
-        return sseClient.createSse(userId);
+        return sseClient.createSse(userId, LinkedType);
     }
+
+
 
 
     @GetMapping("/closeSseLink")
@@ -57,8 +52,6 @@ public class UserController {
         }
 
         return Result.error("关闭失败");
-
-
     }
 
 
@@ -76,7 +69,6 @@ public class UserController {
 
     }
 
-
     /**
      * 用户注销
      *
@@ -86,6 +78,25 @@ public class UserController {
     @GetMapping("/userLayout")
     public Result userLayout(HttpServletRequest request) {
         return userService.userLayout(request);
+    }
+
+
+    @PostMapping("/updateInfo")
+    public Result updateUser(@RequestBody User user, HttpServletRequest request) {
+
+        if (user == null) {
+            throw new RuntimeException("参数为空");
+        }
+
+        long userId = userService.getUserId(request);
+        if (userService.updateUser(user, request)) {
+            //根据实际需求前端更新完成之后需要重新获取更新后的对象
+            User newUser = userService.getById(userId);
+
+            return Result.success("修改成功", newUser);
+        } else {
+            return Result.error("修改失败");
+        }
     }
 
 

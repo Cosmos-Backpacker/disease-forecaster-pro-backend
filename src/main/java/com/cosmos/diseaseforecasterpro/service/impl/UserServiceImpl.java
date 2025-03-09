@@ -157,7 +157,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
             //往session中设置的登录状态
 //            request.getSession().setAttribute(USER_LOGIN_STATE, safetyUser);
-            log.info("存储Session成功,{}",safetyUser.toString());
+            log.info("存储Session成功,{}", safetyUser.toString());
 
             return Result.success("登录成功！！", safetyUser);
         }
@@ -197,12 +197,46 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (userObj == null) {
             throw new BusinessException(ErrorCode.NO_AUTH, "未登录");
         }
+
         //强转
         User user = (User) userObj;
+
 
         return user.getId();
     }
 
+    @Override
+    public Boolean updateUser(User user, HttpServletRequest request) {
+
+        Long userId = getUserId(request);
+
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getId, userId);
+
+        if (!StringUtils.isBlank(user.getUserPassword())) {
+            if (user.getUserPassword().length() < 6) {
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码不能小于6位");
+            }
+            //加密密码
+            user.setUserPassword(DigestUtils.md5DigestAsHex((SALT + user.getUserPassword()).getBytes()));
+        }
+
+
+        int result = mapper.update(user, wrapper);
+        if (result <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "更新失败");
+        }
+
+
+        //重新存放缓存
+        User newUser = this.getById(userId);
+        if (newUser == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "更新失败");
+        }
+        request.getSession().setAttribute(USER_LOGIN_STATE, this.getSafetyUser(newUser));
+
+        return true;
+    }
 
     @Override
     public List<User> selectAllByUsername(String username, HttpServletRequest request) {

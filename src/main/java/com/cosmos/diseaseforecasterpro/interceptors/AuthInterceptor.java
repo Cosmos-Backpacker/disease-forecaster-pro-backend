@@ -21,7 +21,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         Object user = request.getSession().getAttribute(USER_LOGIN_STATE);
         if (user == null) {
             log.error("未登录");
-            return false;
+            throw new BusinessException(ErrorCode.NO_LOGIN);
         }
         return true;
     }

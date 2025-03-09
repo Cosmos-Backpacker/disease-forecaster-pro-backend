@@ -28,6 +28,8 @@ server:
 
 
 
+
+
 # MyBatis-Plus 配置
 mybatis-plus:
   # MyBatis-Plus 配置项
@@ -48,3 +50,34 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑删除的值
       # 逻辑未删除值（默认值：0）
       logic-not-delete-value: 0 # 逻辑未删除的值
+
+
+
+bd:
+  config:
+    ocr-app-id: 115931857
+    ocr-api-key: BOO6FZfMEi99JHuODCoMRXqw
+    ocr-secret-key: qn35fWbmx0gc9cG7qdXs6pnLKrdMfAZN
+
+    enhance-app-id: 116094898
+    enhance-api-key: 5g2YQVPEHTyrtHi54wzCWL5g
+    enhance-secret-key: QjVqipr6OYnpI6AlwViAuiPFbWcXR1pP
+
+
+
+#下面是讯飞大模型相关配置
+xf:
+  config:
+    host-url-websocket: https://spark-api.xf-yun.com/v1.1/chat   #大模型的基准请求
+    app-id: 6fb94523
+    api-secret: NTg3NDgwMDk0NGMwZGZjNjY4ODk1MjA5
+    api-key: 1347a1ab698c3cbc5e57ea93dc0d3f52
+    #    app-id: b8781c23
+    max-response-time: 30     #设置最长等待时间为30s
+    host-url-ocr: http://api.xf-yun.com/v1/private/sf8e6aca1     #OCR请求接口
+    host-url-image-u: https://spark-api.cn-huabei-1.xf-yun.com/v2.1/image
+    host-url-image-g: https://spark-api.cn-huabei-1.xf-yun.com/v2.1/tti
+    #    api-secret: ZTk4MjMzYjM0YmYxZGQxYmEyZTc1Nzcy
+    #    api-key: 5a15fb5c654f9315a941e51b65ecefa6
+
+

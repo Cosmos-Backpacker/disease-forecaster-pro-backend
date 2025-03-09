@@ -72,7 +72,7 @@ public interface IUserService extends IService<User> {
     public Result userLayout(HttpServletRequest request);
 
 
-
+    public Boolean updateUser(User user, HttpServletRequest request);
 
     public long getUserId(HttpServletRequest request);
 

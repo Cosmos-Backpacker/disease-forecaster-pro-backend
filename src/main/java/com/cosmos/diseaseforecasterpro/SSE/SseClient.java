@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-
 @Slf4j
 @Component
 public class SseClient {
@@ -30,7 +29,7 @@ public class SseClient {
     /**
      * 创建连接
      */
-    public SseEmitter createSse(long userId) {
+    public SseEmitter createSse(long userId, String type) {
 
         //默认30秒超时,设置为0L则永不超时
         SseEmitter sseEmitter = new SseEmitter(0L);
@@ -45,8 +44,8 @@ public class SseClient {
 
         emitters.put(userId, sseEmitter);
         //发布事件，连接成功之后自动创建一个对话集合
-        eventPublisher.publishEvent(new LinkSseEvent(this, userId, "sse连接成功！"));
-        log.info("[{}]创建sse连接成功！emitter为：{}", userId,emitters.get(userId));
+        eventPublisher.publishEvent(new LinkSseEvent(this, userId, "sse连接成功！", type));
+        log.info("[{}]创建sse连接成功！emitter为：{}", userId, emitters.get(userId));
 
 
         //完成后回调
@@ -85,7 +84,7 @@ public class SseClient {
      * 给指定用户发送消息
      */
     public boolean sendMessage(long userId, String messageId, String message) {
-        if (message==null) {
+        if (message == null) {
             log.info("参数异常，msg为null,用户ID：{}", userId);
             return false;
         }
@@ -117,7 +116,7 @@ public class SseClient {
      * @return
      */
     public boolean sendMessage(long userId, String message) {
-        if (message==null) {
+        if (message == null) {
             log.info("参数异常，msg为{}", (Object) null);
             return false;
         }
