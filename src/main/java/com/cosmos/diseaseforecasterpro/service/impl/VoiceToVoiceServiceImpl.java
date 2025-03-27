@@ -26,7 +26,7 @@ public class VoiceToVoiceServiceImpl implements VoiceToVoiceService {
     private TTS tts;
 
     @Override
-    public File processVoice(HttpServletRequest req, String text) throws Exception {
+    public File processVoice(HttpServletRequest req, String text,String vcn) throws Exception {
         // 获取大模型响应文本
         String responseText = chatService.deepSeekVoiceChatSync(req, text);
         log.info("大模型返回的文本: {}", responseText);
@@ -40,7 +40,7 @@ public class VoiceToVoiceServiceImpl implements VoiceToVoiceService {
 
         // 异步转同步：等待合成完成
         try {
-            tts.convertTextToSpeech(responseText, outputFile)
+            tts.convertTextToSpeech(responseText, outputFile,vcn)
                     .get(60, TimeUnit.SECONDS); // 设置超时防止无限等待
 
             log.error("返回成功");

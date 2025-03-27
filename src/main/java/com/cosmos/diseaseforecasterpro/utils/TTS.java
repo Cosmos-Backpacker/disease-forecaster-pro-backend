@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import cn.xfyun.model.response.TtsResponse;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -29,10 +30,10 @@ public class TTS {
     private File f;
     private FileOutputStream os;
 
-    public CompletableFuture<Void> convertTextToSpeech(String text, File outputFile) throws MalformedURLException, SignatureException, UnsupportedEncodingException, FileNotFoundException {
+    public CompletableFuture<Void> convertTextToSpeech(String text, File outputFile, @RequestParam(value = "xiaoyan") String vcn) throws MalformedURLException, SignatureException, UnsupportedEncodingException, FileNotFoundException {
         TtsClient ttsClient = new TtsClient.Builder()
                 .signature(xfConfig.getAppId(), xfConfig.getApiKey(), xfConfig.getApiSecret())
-                .vcn("xiaoyan")
+                .vcn(vcn)//设置发音人
                 .build();
 
         CompletableFuture<Void> future = new CompletableFuture<>();

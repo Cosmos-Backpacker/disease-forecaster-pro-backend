@@ -1,6 +1,7 @@
 package com.cosmos.diseaseforecasterpro.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cosmos.diseaseforecasterpro.pojo.Mbti.Dimension;
 import com.cosmos.diseaseforecasterpro.pojo.Mbti.MbtiAnswer;
 import com.cosmos.diseaseforecasterpro.pojo.Mbti.MbtiQuestion;
@@ -42,8 +43,27 @@ public class MbtiQuestionServiceImpl extends ServiceImpl<MbtiQuestionMapper, Mbt
 
     // 获取所有MBTI问题
     @Override
-    public List<MbtiQuestion> getAllQuestions() {
+    public List<MbtiQuestion> get200Questions() {
         LambdaQueryWrapper<MbtiQuestion> wrapper = new LambdaQueryWrapper<>();
+        wrapper.last("ORDER BY RAND() LIMIT 200");
+        return mbtiQuestionMapper.selectList(wrapper);
+    }
+
+    @Override
+    public List<MbtiQuestion> get93Questions() {
+        LambdaQueryWrapper<MbtiQuestion> wrapper = new LambdaQueryWrapper<>();
+        // 合并排序和限制为一个SQL片段
+        wrapper.last("ORDER BY RAND() LIMIT 93");
+
+        return mbtiQuestionMapper.selectList(wrapper);
+    }
+
+    @Override
+    public List<MbtiQuestion> get145Questions() {
+        LambdaQueryWrapper<MbtiQuestion> wrapper = new LambdaQueryWrapper<>();
+        // 合并排序和限制为一个SQL片段
+        wrapper.last("ORDER BY RAND() LIMIT 145");
+
         return mbtiQuestionMapper.selectList(wrapper);
     }
 

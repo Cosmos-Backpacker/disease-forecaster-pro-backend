@@ -20,7 +20,11 @@ public interface IMbtiQuestionService extends IService<MbtiQuestion> {
 
 
     // 获取所有问题
-    List<MbtiQuestion> getAllQuestions();
+    List<MbtiQuestion> get200Questions();
+
+    List<MbtiQuestion> get93Questions();
+
+    List<MbtiQuestion> get145Questions();
 
     // 根据用户回答的问题，评估用户人格
     MbtiResult evaluatePersonality(HttpServletRequest req, List<MbtiAnswer> userAnswers);

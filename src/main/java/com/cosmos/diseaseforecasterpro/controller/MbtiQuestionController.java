@@ -28,7 +28,15 @@ public class MbtiQuestionController {
     @GetMapping("/questions")
     public Result getQuestions(@RequestParam(value = "option") String option) {
         log.error(option);
-        List<MbtiQuestion> questions = mbtiService.getAllQuestions();
+        List<MbtiQuestion> questions = null;
+        if (option.equals("full")) {
+            questions = mbtiService.get200Questions();
+        } else if (option.equals("professional")) {
+            questions = mbtiService.get145Questions();
+        } else if (option.equals("standard")) {
+            questions = mbtiService.get93Questions();
+        }
+
         // 返回json结果
         return Result.success("获取所有MBTI问题成功", questions);
     }

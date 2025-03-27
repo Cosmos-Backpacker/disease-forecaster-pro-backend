@@ -19,6 +19,7 @@ public class BdOcrController {
 
     /**
      * 医疗识别
+     *
      * @param file 图片
      * @return 结果
      */
