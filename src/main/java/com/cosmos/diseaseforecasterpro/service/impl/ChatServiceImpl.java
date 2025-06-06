@@ -49,7 +49,7 @@ public class ChatServiceImpl implements IChatService {
 
 
     @Override
-    public String deepSeekChat(HttpServletRequest req, String question, @RequestParam(required = false, defaultValue = "你是一个助手，请回答用户问题") String systemMessage) {
+    public String deepSeekChat(HttpServletRequest req, String question, @RequestParam(required = false, defaultValue = "你是一个助手，请回答用户问题") String systemMessage, @RequestParam(required = false, defaultValue = "这是检索出来的专业医疗数据")String retrievedInfo) {
 
         //获取用户id，用户id就是sse连接id
         Long userId = iUserService.getUserId(req);
@@ -362,7 +362,7 @@ public class ChatServiceImpl implements IChatService {
 
         // 如果没有创建系统设置就创建系统设置，创建了之后就不需要
         if (userMessages.isEmpty() || !userMessages.get(0).getRole().equals("system"))
-            userMessages.add(Message.createSystemMessage(systemMessage));
+            userMessages.add(Message.createSystemMessage("你是一个排忧解难小助手，请陪用户聊天，但是每次回答要一到两句话不要过长,随着聊天深入回答可以稍微加上一点"));
 
         // 创建用户问题
         userMessages.add(Message.createUserMessage(question));
@@ -564,6 +564,14 @@ public class ChatServiceImpl implements IChatService {
 
         return "响应成功";
 
+    }
+
+
+    @Override
+    public String extractInfo(HttpServletRequest req, String info) {
+
+        //模拟提取关键信息
+        return "心脏病，血压高";
     }
 
 

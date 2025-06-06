@@ -200,8 +200,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         //强转
         User user = (User) userObj;
-
-
         return user.getId();
     }
 

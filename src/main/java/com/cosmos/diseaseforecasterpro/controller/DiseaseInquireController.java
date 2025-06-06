@@ -3,7 +3,6 @@ package com.cosmos.diseaseforecasterpro.controller;
 
 import com.cosmos.diseaseforecasterpro.pojo.Result;
 import com.cosmos.diseaseforecasterpro.service.otherService.DiseaseInquireService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,10 +26,9 @@ public class DiseaseInquireController {
 
 
     @GetMapping("/chat")
-    public Result chatBotInquire( String question) {
+    public Result chatBotInquire(String question) {
         return diseaseInquireService.chatbotInquire(question);
     }
-
 
 
 }

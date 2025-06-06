@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 public interface IChatService {
 
-    String deepSeekChat(HttpServletRequest req, String question, @RequestParam(required = false, defaultValue = "你是一个助手，请你回答用户问题") String systemMessage);
+    String deepSeekChat(HttpServletRequest req, String question, @RequestParam(required = false, defaultValue = "你是一个助手，请你回答用户问题") String systemMessage,String retrievedInfo);
 
     String psyHealthDeepSeekChat(HttpServletRequest req, String question, @RequestParam(required = false, defaultValue = "你是一个助手，请回答用户问题") String systemMessage);
 
@@ -19,4 +19,11 @@ public interface IChatService {
      * 同步调用DeepSeek不保存任何记录
      */
     String deepSeekChatTongYongSync(HttpServletRequest req, String question);
+
+    /**
+     * 提取信息中的关键医学信息
+     */
+    String extractInfo(HttpServletRequest req, String info);
+
+
 }

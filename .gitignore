@@ -36,3 +36,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+
+###本地配置文件不上传 ###
+application-local.yml

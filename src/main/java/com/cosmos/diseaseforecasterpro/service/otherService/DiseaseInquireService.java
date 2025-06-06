@@ -115,6 +115,11 @@ public class DiseaseInquireService {
     }
 
 
+    public String DiseaseInquireJ(String question) {
+
+        return "查询之后的信息";
+    }
+
     // 解析JSON数据
     private Map<String, String> parseJsonResponse(String jsonResponse) {
         ObjectMapper objectMapper = new ObjectMapper();

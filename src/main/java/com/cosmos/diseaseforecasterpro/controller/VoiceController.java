@@ -23,8 +23,9 @@ public class VoiceController {
     @PostMapping(value = "/voice")
     public ResponseEntity<Resource> processVoice(HttpServletRequest req, @RequestParam(value = "text") String text, @RequestParam(defaultValue = "xiaoyan", required = false) String vcn) {
         try {
+
             // 调用服务生成音频文件
-            File outputFile = voiceToVoiceService.processVoice(req, text,vcn);
+            File outputFile = voiceToVoiceService.processVoice(req, text, vcn);
 
             // 检查文件是否存在
             if (!outputFile.exists()) {
