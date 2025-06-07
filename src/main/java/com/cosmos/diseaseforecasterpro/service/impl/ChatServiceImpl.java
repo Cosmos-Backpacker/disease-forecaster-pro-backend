@@ -35,6 +35,9 @@ public class ChatServiceImpl implements IChatService {
     @Value("${deepseek.apikey}")
     private String deepSeekApikey;
 
+    //用于放在请求头中验证
+    String authorValue = String.format("Bearer %s", deepSeekApikey);
+
     @Autowired
     private SseClient sseClient;
 
@@ -120,7 +123,7 @@ public class ChatServiceImpl implements IChatService {
         Request request = new Request.Builder()
                 .url("https://api.deepseek.com/chat/completions") // 替换为实际的API URL
                 .post(RequestBody.create(requestBodyJson, MediaType.parse("application/json")))
-                .addHeader("Authorization", "Bearer sk-0b7d418731b640659619b65342360fa4") // 替换为实际的API密钥
+                .addHeader("Authorization", this.authorValue) // 替换为实际的API密钥
                 .build();
         //异步调用deepSeek
 
@@ -250,7 +253,7 @@ public class ChatServiceImpl implements IChatService {
         Request request = new Request.Builder()
                 .url("https://api.deepseek.com/chat/completions") // 替换为实际的API URL
                 .post(RequestBody.create(requestBodyJson, MediaType.parse("application/json")))
-                .addHeader("Authorization", "Bearer sk-0b7d418731b640659619b65342360fa4") // 替换为实际的API密钥
+                .addHeader("Authorization", this.authorValue) // 替换为实际的API密钥
                 .build();
 
         // 同步调用deepSeek
@@ -317,7 +320,7 @@ public class ChatServiceImpl implements IChatService {
         Request request = new Request.Builder()
                 .url("https://api.deepseek.com/chat/completions") // 替换为实际的API URL
                 .post(RequestBody.create(requestBodyJson, MediaType.parse("application/json")))
-                .addHeader("Authorization", "Bearer sk-0b7d418731b640659619b65342360fa4") // 替换为实际的API密钥
+                .addHeader("Authorization", this.authorValue) // 替换为实际的API密钥
                 .build();
 
         // 同步调用deepSeek
@@ -389,7 +392,7 @@ public class ChatServiceImpl implements IChatService {
         Request request = new Request.Builder()
                 .url("https://api.deepseek.com/chat/completions") // 替换为实际的API URL
                 .post(RequestBody.create(requestBodyJson, MediaType.parse("application/json")))
-                .addHeader("Authorization", "Bearer sk-0b7d418731b640659619b65342360fa4") // 替换为实际的API密钥
+                .addHeader("Authorization", this.authorValue) // 替换为实际的API密钥
                 .build();
 
         // 同步调用deepSeek
@@ -483,11 +486,10 @@ public class ChatServiceImpl implements IChatService {
         log.error("请求体: {}", requestBodyJson);
 
         // 构造请求体
-        String authorValue = String.format("Bearer %s", deepSeekApikey);
         Request request = new Request.Builder()
                 .url("https://api.deepseek.com/chat/completions") // 替换为实际的API URL
                 .post(RequestBody.create(requestBodyJson, MediaType.parse("application/json")))
-                .addHeader("Authorization", authorValue) // 替换为实际的API密钥
+                .addHeader("Authorization", this.authorValue) // 替换为实际的API密钥
                 .build();
         //异步调用deepSeek
 
