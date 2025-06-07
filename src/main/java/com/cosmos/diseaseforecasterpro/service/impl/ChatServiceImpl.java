@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -29,6 +30,10 @@ import java.util.concurrent.TimeUnit;
 @Service
 @Slf4j
 public class ChatServiceImpl implements IChatService {
+
+
+    @Value("${deepseek.apikey}")
+    private String deepSeekApikey;
 
     @Autowired
     private SseClient sseClient;
@@ -49,7 +54,7 @@ public class ChatServiceImpl implements IChatService {
 
 
     @Override
-    public String deepSeekChat(HttpServletRequest req, String question, @RequestParam(required = false, defaultValue = "你是一个助手，请回答用户问题") String systemMessage, @RequestParam(required = false, defaultValue = "这是检索出来的专业医疗数据")String retrievedInfo) {
+    public String deepSeekChat(HttpServletRequest req, String question, @RequestParam(required = false, defaultValue = "你是一个助手，请回答用户问题") String systemMessage, @RequestParam(required = false, defaultValue = "这是检索出来的专业医疗数据") String retrievedInfo) {
 
         //获取用户id，用户id就是sse连接id
         Long userId = iUserService.getUserId(req);
@@ -478,10 +483,11 @@ public class ChatServiceImpl implements IChatService {
         log.error("请求体: {}", requestBodyJson);
 
         // 构造请求体
+        String authorValue = String.format("Bearer %s", deepSeekApikey);
         Request request = new Request.Builder()
                 .url("https://api.deepseek.com/chat/completions") // 替换为实际的API URL
                 .post(RequestBody.create(requestBodyJson, MediaType.parse("application/json")))
-                .addHeader("Authorization", "Bearer sk-0b7d418731b640659619b65342360fa4") // 替换为实际的API密钥
+                .addHeader("Authorization", authorValue) // 替换为实际的API密钥
                 .build();
         //异步调用deepSeek
 
