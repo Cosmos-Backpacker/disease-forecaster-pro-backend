@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -36,7 +37,15 @@ public class ChatServiceImpl implements IChatService {
     private String deepSeekApikey;
 
     //用于放在请求头中验证
-    String authorValue = String.format("Bearer %s", deepSeekApikey);
+
+    private String authorValue;
+
+    @PostConstruct
+    public void init() {
+        authorValue = String.format("Bearer %s", deepSeekApikey);
+    }
+
+    ;
 
     @Autowired
     private SseClient sseClient;
@@ -118,6 +127,8 @@ public class ChatServiceImpl implements IChatService {
 
         String requestBodyJson = new Gson().toJson(requestBody);
         log.error("请求体: {}", requestBodyJson);
+        log.error("q请求API为：{}", this.authorValue);
+        log.error("请求的api事实上为：{}", deepSeekApikey);
 
         // 构造请求体
         Request request = new Request.Builder()
